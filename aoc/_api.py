@@ -32,14 +32,27 @@ if not YEAR:
 
 
 def get_input(day: int, year: int = YEAR):
+    """
+    Usage:
+    ```python
+    import aoc
+    data_rows = aoc.get_input(5).splitlines()
+    ```python
+    """
+
     Path("data").mkdir(exist_ok=True)
 
     file_name = f"data/{year}_{day}.txt"
     data = _set_read_file(file_name)
     if not data:
+        response = requests.get(
+                f"https://adventofcode.com/{year}/day/{day}/input",
+                cookies={"session": SESSION})
+        if not response.ok:
+            if response.status_code == 404:
+                raise FileNotFoundError("404 File not found")
+            raise RuntimeError(f"Request failed, code: {response.status_code}")
         data = _set_read_file(
             file_name,
-            requests.get(
-                f"https://adventofcode.com/{year}/day/{day}/input",
-                cookies={"session": SESSION}).text[:-1])
+            response.text[:-1])
     return data
