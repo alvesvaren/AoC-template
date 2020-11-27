@@ -31,7 +31,7 @@ if not YEAR:
         str(datetime.now().year))
 
 
-def get_input(day: int, year: int = YEAR):
+def get_input(day: int, year: int = YEAR, overwrite: bool = False):
     """
     Usage:
     ```python
@@ -44,6 +44,8 @@ def get_input(day: int, year: int = YEAR):
 
     file_name = f"data/{year}_{day}.txt"
     data = _set_read_file(file_name)
+    if overwrite:
+        data = None
     if not data:
         response = requests.get(
                 f"https://adventofcode.com/{year}/day/{day}/input",
