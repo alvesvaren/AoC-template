@@ -52,8 +52,8 @@ def get_input(day: int, year: int = YEAR, overwrite: bool = False):
                 cookies={"session": SESSION})
         if not response.ok:
             if response.status_code == 404:
-                raise FileNotFoundError("404 File not found")
-            raise RuntimeError(f"Request failed, code: {response.status_code}")
+                raise FileNotFoundError(response.text)
+            raise RuntimeError(f"Request failed, code: {response.status_code}, message: {response.content}")
         data = _set_read_file(
             file_name,
             response.text[:-1])
