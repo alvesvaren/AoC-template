@@ -1,6 +1,6 @@
-# AoC-2020
+# AoC-template
 
-Advent Of Code 2020 Solutions in python
+This is a template repository to use with advent of code
 
 ## Initialize:
 
