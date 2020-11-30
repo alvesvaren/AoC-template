@@ -14,7 +14,8 @@ This will ask you for your session cookie (which can be found in the application
 
 ## Usage: 
 
-`1a.py` ```python
+In `1a.py`:
+```python
 from aoc import get_input
 
 data = get_input(1).splitlines()
