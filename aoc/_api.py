@@ -47,12 +47,9 @@ def get_input(day: int, year: int = YEAR, overwrite: bool = False):
     if overwrite:
         data = None
     if not data:
-        response = requests.get(
-                f"https://adventofcode.com/{year}/day/{day}/input",
-                cookies={"session": SESSION})
+        url = f"https://adventofcode.com/{year}/day/{day}/input".replace("\n", "")
+        response = requests.get(url, cookies={"session": SESSION})
         if not response.ok:
-            if response.status_code == 404:
-                raise FileNotFoundError(response.text)
             raise RuntimeError(f"Request failed, code: {response.status_code}, message: {response.content}")
         data = _set_read_file(
             file_name,
