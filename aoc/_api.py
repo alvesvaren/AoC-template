@@ -23,13 +23,14 @@ if not SESSION:
     SESSION = _set_read_file(
         _SESSION_FILE_NAME,
         input("Enter your session cookie: "))
+SESSION = SESSION.strip()
 
 YEAR = _set_read_file(_YEAR_FILE_NAME)
 if not YEAR:
     YEAR = _set_read_file(
         _YEAR_FILE_NAME,
-        str(datetime.now().year)).strip()
-
+        str(datetime.now().year))
+YEAR = YEAR.strip()
 
 def get_input(day: int, year: int = YEAR, overwrite: bool = False):
     """
