@@ -1,3 +1,4 @@
+from typing import Union
 import requests
 from pathlib import Path
 from datetime import datetime
@@ -6,7 +7,7 @@ _SESSION_FILE_NAME = "session.txt"
 _YEAR_FILE_NAME = "year.txt"
 
 
-def _set_read_file(filename: str, default: str = None) -> str:
+def _set_read_file(filename: str, default: str = None) -> Union[str, None]:
     try:
         with open(filename) as file:
             return file.read()
@@ -30,7 +31,7 @@ if not YEAR:
     YEAR = _set_read_file(
         _YEAR_FILE_NAME,
         str(datetime.now().year))
-YEAR = YEAR.strip()
+YEAR = int(YEAR.strip())
 
 def get_input(day: int, year: int = YEAR, overwrite: bool = False):
     """
@@ -49,9 +50,11 @@ def get_input(day: int, year: int = YEAR, overwrite: bool = False):
         data = None
     if not data:
         response = requests.get(
-            f"https://adventofcode.com/{year}/day/{day}/input",
-            cookies={"session": SESSION})
+                f"https://adventofcode.com/{year}/day/{day}/input",
+                cookies={"session": SESSION})
         if not response.ok:
+            if response.status_code == 404:
+                raise FileNotFoundError(response.text)
             raise RuntimeError(f"Request failed, code: {response.status_code}, message: {response.content}")
         data = _set_read_file(
             file_name,
