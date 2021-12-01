@@ -24,6 +24,7 @@ if not SESSION:
     SESSION = _set_read_file(
         _SESSION_FILE_NAME,
         input("Enter your session cookie: "))
+assert SESSION is not None
 SESSION = SESSION.strip()
 
 YEAR = _set_read_file(_YEAR_FILE_NAME)
@@ -31,6 +32,7 @@ if not YEAR:
     YEAR = _set_read_file(
         _YEAR_FILE_NAME,
         str(datetime.now().year))
+    assert YEAR is not None
 YEAR = int(YEAR.strip())
 
 def get_input(day: int, year: int = YEAR, overwrite: bool = False):
@@ -45,9 +47,7 @@ def get_input(day: int, year: int = YEAR, overwrite: bool = False):
     Path("data").mkdir(exist_ok=True)
 
     file_name = f"data/{year}_{day}.txt"
-    data = _set_read_file(file_name)
-    if overwrite:
-        data = None
+    data = None if overwrite else _set_read_file(file_name)
     if not data:
         response = requests.get(
                 f"https://adventofcode.com/{year}/day/{day}/input",
@@ -59,4 +59,6 @@ def get_input(day: int, year: int = YEAR, overwrite: bool = False):
         data = _set_read_file(
             file_name,
             response.text[:-1])
+    if data is None:
+        raise FileNotFoundError(f"Data could not be fetched for day {day}")
     return data
